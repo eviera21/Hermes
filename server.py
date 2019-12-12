@@ -48,7 +48,7 @@ class EchoServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
             sock.close()
             self.logger.debug(f'received response from peer={peer.server_id}, response={response}')
         except:
-            print(f'Unable to send message to {peer}')
+            print(f'Yikes, unable to send message to {peer}')
 
     def send_external(self, external_address):
         self.logger.debug(f'connecting to {external_address}')

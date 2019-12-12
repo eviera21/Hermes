@@ -35,7 +35,7 @@ class EchoClient:
             sock.close()
             self.logger.debug(f'received response from server={server.server_id}, response={response}')
         except:
-            print(f'Unable to send message to {server}')
+            print(f'Yikes, unable to send message to {server}')
 
     def close_connection(self, server: EchoServer):
         return self.connections.popitem(server)

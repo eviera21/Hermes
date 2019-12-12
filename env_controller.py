@@ -27,14 +27,14 @@ class EnvController:
             self.env[server_name] = new_server
         except Exception as e:
             if(isinstance(e, TypeError)):
-                print(f'Error: Unrecognized variable.')
+                print(f'yikes: Unrecognized variable.')
             if(isinstance(e, OSError)):
-                print(f'Error: {e}.')
+                print(f'yikes: {e}.')
 
     def create_client(self, client_name):
         # Set or update client to the environment.
         if(self.verify_var(client_name)):
-            print(f'Error: client with the name \"{client_name}\" already exists.')
+            print(f'yikes: client with the name \"{client_name}\" already exists.')
             return
         self.env[client_name] = EchoClient()
 
@@ -51,9 +51,9 @@ class EnvController:
             self.logger.debug(f'client removed: client_id={removed_client.id}')
             return removed_client
         elif(isinstance(value, (int, str))):
-            print(f'Error: Variable {var_name} isnot of type: \"EchoServer\" or \"EchoClient\"')
+            print(f'yikes: Variable {var_name} isnot of type: \"EchoServer\" or \"EchoClient\"')
         else:
-            print(f'Error: Unrecognized variable \"{var_name}\"')
+            print(f'yikes: Unrecognized variable \"{var_name}\"')
 
     def var_assign(self, var_name, value):
         if(not isinstance(value, (str, int))):
@@ -65,10 +65,10 @@ class EnvController:
         the_sender = self.verify_var(sender)
         the_receiver = self.verify_var(receiver)
         if(not the_sender):
-            print(f'Error: Unassigned variable {sender}=None')
+            print(f'yikes: Unassigned variable {sender}=None')
             return
         if(not the_receiver):
-            print(f'Error: Unassigned receiver {receiver}=None')
+            print(f'yikes: Unassigned receiver {receiver}=None')
             return
         if(isinstance(the_sender, EchoClient) and isinstance(the_receiver,EchoServer)):
             s1 : EchoServer = the_sender
@@ -80,7 +80,7 @@ class EnvController:
         if(something):
             print(something)
         else:
-            print(f'Error: Unrecognized variable: {var_name}')
+            print(f'yikes: Unrecognized variable: {var_name}')
 
     def connect_external(self, sender, external_address):
         the_sender = self.verify_var
@@ -89,7 +89,7 @@ class EnvController:
         if(isinstance(the_sender, (EchoClient, EchoServer))):
             the_sender.send_external(external_address)
         else:
-            print(f'Error: Variable is not type \"EchoServer\" or \"EchoClient\"')
+            print(f'yikes: Variable is not type \"EchoServer\" or \"EchoClient\"')
 
     def verify_var(self, var):
         try:
