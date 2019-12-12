@@ -78,80 +78,6 @@ precedence = (
 var = {}
 env = EnvController()
 
-def p_statement_start_stop_client(p):
-    '''
-    statement: START CLIENT NAME
-                | STOP NAME
-    '''
-    if p[1] == 'start' and p[2] == 'client':
-        client = p[3]
-            #start client
-        env.create_client(client)
-    elif p[1] == 'stop':
-        #we delete the server
-        env.delete_client_or_server(p[2])
-    else:
-        print('yikes, that client start/stop did not work')
-
-def p_statement_start_server(p):
-    '''
-    statement: START SERVER NAME
-    '''
-    if p[1] == 'start' and p[2] == 'server':
-            server = p[3]
-            #start server
-            size = len(p)
-            if(size == 4):
-                env.create_server(server, "localhost",0)
-                return
-            env.create_server(server, p[4].replace('"',''), p[5])
-    else:
-        print('yikes, that server start did not work')
-
-def p_statement_post(p):
-    '''
-    statement : NAME POST NAME expression
-    '''
-    if p[2] == 'post':
-        #send message
-        varName = p[2]
-        env.info(varName)
-    else:
-        print("I mean, that was supposed to work. How did you mess it up? That did NOT post.")
-
-def p_statement_connect(p):
-    '''statement : NAME CONNECT NAME'''
-    if p[2] == 'connect':
-        client = p[1]
-        target = p[3]
-        data = env.verify_var(target)
-        if re.match("http:\/\/www\. | https:\/\/www\. | http:\/\/", data.__str__()):
-            env.connect_external(client,data)
-            return
-        msg = "PING PING PING . . ."
-        env.send_messsage(client, target, msg)
-    else:
-        print("yikes, there's an error in local connection ...")
-
-def p_statement_message(p):
-    """
-    statement : NAME POST NAME INT
-            | NAME POST NAME FLOAT
-            | NAME POST NAME STRING
-    """
-    if p[2] == "message":
-        size = len(p)
-        env.send_messsage(p[1],p[3],p[4].replace('"',''))
-    else:
-        print("yikes while sending message ...")
-
-def p_statement_data(p):
-    'statement: DATA NAME'
-    if p[1] == "data":
-        env.info(p[2])
-    else:
-        print("yikes while getting variable data ...")
-
 def p_calc(p):
     '''
     calc : expression
@@ -165,6 +91,82 @@ def p_var_assign(p):
     var_assign : NAME EQUALS expression
     '''
     p[0] = ('=', p[1], p[3])
+
+def p_empty(p):
+    '''
+    empty :
+    '''
+    p[0] = None
+
+def p_expression_start_stop_client(p):
+    '''
+    expression : START CLIENT NAME
+                | STOP NAME
+    '''
+    if p[1] == 'start' and p[2] == 'client':
+        client = p[3]
+            #start client
+        env.create_client(client)
+    elif p[1] == 'stop':
+        #we delete the server
+        env.delete_client_or_server(p[2])
+    else:
+        print('yikes, that client start/stop did not work')
+
+def p_expression_start_server(p):
+    '''
+    expression : START SERVER NAME
+    '''
+    if p[1] == 'start' and p[2] == 'server':
+            server = p[3]
+            #start server
+            size = len(p)
+            if(size == 4):
+                env.create_server(server, "localhost",0)
+                return
+            env.create_server(server, p[4].replace('"',''), p[5])
+    else:
+        print('yikes, that server start did not work')
+
+def p_expression_post(p):
+    '''
+    expression : NAME POST NAME expression
+    '''
+    if p[2] == 'post':
+        #send message
+        varName = p[2]
+        env.data(varName)
+    else:
+        print("I mean, that was supposed to work. How did you mess it up? That did NOT post.")
+
+def p_expression_connect(p):
+    '''expression : NAME CONNECT NAME'''
+    if p[2] == 'connect':
+        client = p[1]
+        target = p[3]
+        msg = "Pinging"
+        env.send_messsage(client, target, msg)
+    else:
+        print("yikes, there's an error in local connection ...")
+
+def p_expression_message(p):
+    """
+    expression : NAME POST NAME INT
+            | NAME POST NAME FLOAT
+            | NAME POST NAME STRING
+    """
+    if p[2] == "message":
+        size = len(p)
+        env.send_messsage(p[1], p[3], p[4].replace('"',''))
+    else:
+        print("yikes while sending message ...")
+
+def p_expression_data(p):
+    '''expression : DATA NAME'''
+    if p[1] == "data":
+        env.data(p[2])
+    else:
+        print("yikes while getting variable data ...")
 
 def p_expression(p):
     '''
@@ -187,7 +189,7 @@ def p_expression_str(p):
     '''
     expression : STRING
     '''
-    p[0] = ('str', p[1])
+    p[0] = ('str', p[1].replace('"',''))
 
 def p_expression_var(p):
     '''
@@ -198,16 +200,8 @@ def p_expression_var(p):
 def p_error(p):
     print("Syntax Error Detected!")
 
-def p_empty(p):
-    '''
-    empty :
-    '''
-    p[0] = None
-
 #This builds the parser
 parser = yacc.yacc()
-
-
 
 def run(p):
     if type(p) == tuple:
