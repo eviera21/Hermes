@@ -1,7 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
-from serverAndClient.env_controller import EnvController
+from serverAndClient.controller import Controller
 
 tokens = [
     'INT',
@@ -74,7 +74,7 @@ precedence = (
     ('left', 'EXPONENT'),
 )
 var = {}
-env = EnvController()
+env = Controller()
 
 def p_calc(p):
     '''

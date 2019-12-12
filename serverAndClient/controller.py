@@ -7,10 +7,10 @@ import logging
 logging.basicConfig(filename="../env_logs.log", level=logging.DEBUG, format='%(name)s: %(message)s')
 
 
-class EnvController:
+class Controller:
     # Object to control the language environment
     def __init__(self):
-        self.logger = logging.getLogger('EnvController')
+        self.logger = logging.getLogger('Controller')
         self.env = dict()
 
     def create_server(self, server_name, ip, port):
