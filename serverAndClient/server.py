@@ -1,26 +1,77 @@
+import logging
+import sys
+import socketserver
+import uuid
 import socket
+import threading
+import requests
+
+logging.basicConfig(filename="env_logs.log", level=logging.DEBUG, format='%(name)s: %(message)s', )
 
 
-def server():
-    host = socket.gethostname()  # get local machine name
-    port = 8082  # debe ser el mismo port del cliente
+class EchoRequestHandler(socketserver.BaseRequestHandler):
 
-    s = socket.socket()
-    s.bind((host, port))
-    while True:
-        s.listen(1)
-        c, addr = s.accept()
-        print("Connection from: " + str(addr))
-        isItTrue = True
-        while isItTrue:
-            data = c.recv(1024).decode('utf-8')
-            if not data:
-                break
-            dataToReturn = eval(data)
-            c.send(str(dataToReturn).encode('utf-8'))
+    def handle(self):
+        # Echo the back to the client
+        data = self.request.recv(1024)
+        self.request.sendall(data)
 
-    c.close()
+        return
 
 
-if __name__ == '__main__':
-    server()
+class EchoServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+
+    def __init__(self, server_address: tuple):
+        # socketserver.TCPServer.__init__(self, server_address, handler_class)
+
+        super().__init__(server_address, EchoRequestHandler)
+        self.server_id = uuid.uuid4()
+        self.logger = logging.getLogger(f'EchoServer({self.server_id})')
+        self.logger.debug(f'server created ip={self.server_address[0]} port={self.server_address[1]}')
+        self.connection_history = []
+        self.is_running = False
+
+    def finish_request(self, request, client_address):
+        print(f'Server handled request from {client_address}')
+        self.logger.debug(f'request handled')
+        return super().finish_request(request, client_address)
+
+    def run_me(self):
+        """Run server to handle each request on a diferent thread."""
+        t = threading.Thread(target=self.serve_forever)
+        t.daemon = True  # don't hang on exit
+        t.start()
+        self.is_running = True
+
+    def stop_me(self):
+        self.logger.debug('closing server')
+        self.shutdown()
+        self.server_close()
+
+    def message_peer(self, message, peer):
+        """Send message to a peer server"""
+        try:
+            self.logger.debug(f'sending message to peer={peer.server_id}, message=\"{message}\"')
+
+            self.connection_history.append(peer.server_id.__str__())
+
+            ip, port = peer.server_address
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((ip, port))
+            sock.sendall(bytes(message, 'ascii'))
+            print(f'Server({self.server_id}): {message}')
+            response = str(sock.recv(1024), 'ascii')
+            sock.close()
+            self.logger.debug(f'recieved response from peer={peer.server_id}, response={response}')
+        except:
+            print(f'Unable to send message to {peer}')
+
+    def send_external(self, external_address):
+        self.logger.debug(f'connecting to {external_address}')
+        req = requests.get(url=external_address)
+        self.connection_history.append(external_address)
+        print(f'Response from {external_address}: {req.status_code}')
+
+    def __repr__(self):
+        ip, port = self.server_address
+        return f'EchoServer<server_id={self.server_id}, ip={ip}, port={port}, connection_history={self.connection_history}>'

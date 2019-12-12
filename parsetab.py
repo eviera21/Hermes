@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEleftEXPONENTDIVIDE EQUALS EXPONENT FLOAT INT MINUS MULTIPLY NAME PLUS\n    calc : expression\n        | var_assign\n        | empty\n    \n    var_assign : NAME EQUALS expression\n    \n    expression : expression EXPONENT expression\n                | expression MULTIPLY expression\n                | expression DIVIDE expression\n                | expression PLUS expression\n                | expression MINUS expression\n    \n    expression : INT\n                | FLOAT\n    \n    expression : NAME\n    \n    empty :\n    '
+_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEleftEXPONENTCLIENT CONNECT DIVIDE EQUALS EXIT EXPONENT FLOAT GET INT MINUS MULTIPLY NAME PLUS POST SERVER START STOP STRING\n    calc : expression\n        | var_assign\n        | empty\n    \n    var_assign : NAME EQUALS expression\n    \n    empty :\n    \n    expression : START CLIENT NAME\n                | STOP NAME\n    \n    expression : START SERVER NAME\n    expression : NAME CONNECT NAMEexpression : EXIT\n    expression : NAME POST NAME expression\n    expression : GET NAME\n    expression : expression EXPONENT expression\n                | expression MULTIPLY expression\n                | expression DIVIDE expression\n                | expression PLUS expression\n                | expression MINUS expression\n    \n    expression : INT\n                | FLOAT\n                | STRING\n    \n    expression : NAME\n    '
     
-_lr_action_items = {'INT':([0,8,9,10,11,12,13,],[5,5,5,5,5,5,5,]),'FLOAT':([0,8,9,10,11,12,13,],[6,6,6,6,6,6,6,]),'NAME':([0,8,9,10,11,12,13,],[7,15,15,15,15,15,15,]),'$end':([0,1,2,3,4,5,6,7,14,15,16,17,18,19,20,],[-13,0,-1,-2,-3,-10,-11,-12,-5,-12,-6,-7,-8,-9,-4,]),'EXPONENT':([2,5,6,7,14,15,16,17,18,19,20,],[8,-10,-11,-12,-5,-12,8,8,8,8,8,]),'MULTIPLY':([2,5,6,7,14,15,16,17,18,19,20,],[9,-10,-11,-12,-5,-12,-6,-7,9,9,9,]),'DIVIDE':([2,5,6,7,14,15,16,17,18,19,20,],[10,-10,-11,-12,-5,-12,-6,-7,10,10,10,]),'PLUS':([2,5,6,7,14,15,16,17,18,19,20,],[11,-10,-11,-12,-5,-12,-6,-7,-8,-9,11,]),'MINUS':([2,5,6,7,14,15,16,17,18,19,20,],[12,-10,-11,-12,-5,-12,-6,-7,-8,-9,12,]),'EQUALS':([7,],[13,]),}
+_lr_action_items = {'START':([0,13,14,15,16,17,22,34,],[5,5,5,5,5,5,5,5,]),'STOP':([0,13,14,15,16,17,22,34,],[7,7,7,7,7,7,7,7,]),'NAME':([0,7,9,13,14,15,16,17,18,19,20,21,22,34,],[6,23,24,26,26,26,26,26,31,32,33,34,26,26,]),'EXIT':([0,13,14,15,16,17,22,34,],[8,8,8,8,8,8,8,8,]),'GET':([0,13,14,15,16,17,22,34,],[9,9,9,9,9,9,9,9,]),'INT':([0,13,14,15,16,17,22,34,],[10,10,10,10,10,10,10,10,]),'FLOAT':([0,13,14,15,16,17,22,34,],[11,11,11,11,11,11,11,11,]),'STRING':([0,13,14,15,16,17,22,34,],[12,12,12,12,12,12,12,12,]),'$end':([0,1,2,3,4,6,8,10,11,12,23,24,25,26,27,28,29,30,31,32,33,35,36,],[-5,0,-1,-2,-3,-21,-10,-18,-19,-20,-7,-12,-13,-21,-14,-15,-16,-17,-6,-8,-9,-4,-11,]),'EXPONENT':([2,6,8,10,11,12,23,24,25,26,27,28,29,30,31,32,33,35,36,],[13,-21,-10,-18,-19,-20,-7,-12,-13,-21,13,13,13,13,-6,-8,-9,13,13,]),'MULTIPLY':([2,6,8,10,11,12,23,24,25,26,27,28,29,30,31,32,33,35,36,],[14,-21,-10,-18,-19,-20,-7,-12,-13,-21,-14,-15,14,14,-6,-8,-9,14,14,]),'DIVIDE':([2,6,8,10,11,12,23,24,25,26,27,28,29,30,31,32,33,35,36,],[15,-21,-10,-18,-19,-20,-7,-12,-13,-21,-14,-15,15,15,-6,-8,-9,15,15,]),'PLUS':([2,6,8,10,11,12,23,24,25,26,27,28,29,30,31,32,33,35,36,],[16,-21,-10,-18,-19,-20,-7,-12,-13,-21,-14,-15,-16,-17,-6,-8,-9,16,16,]),'MINUS':([2,6,8,10,11,12,23,24,25,26,27,28,29,30,31,32,33,35,36,],[17,-21,-10,-18,-19,-20,-7,-12,-13,-21,-14,-15,-16,-17,-6,-8,-9,17,17,]),'CLIENT':([5,],[18,]),'SERVER':([5,],[19,]),'CONNECT':([6,26,],[20,20,]),'POST':([6,26,],[21,21,]),'EQUALS':([6,],[22,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,8,9,10,11,12,13,],[2,14,16,17,18,19,20,]),'var_assign':([0,],[3,]),'empty':([0,],[4,]),}
+_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,13,14,15,16,17,22,34,],[2,25,27,28,29,30,35,36,]),'var_assign':([0,],[3,]),'empty':([0,],[4,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,17 +27,25 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> calc","S'",1,None,None,None),
-  ('calc -> expression','calc',1,'p_calc','calculate.py',55),
-  ('calc -> var_assign','calc',1,'p_calc','calculate.py',56),
-  ('calc -> empty','calc',1,'p_calc','calculate.py',57),
-  ('var_assign -> NAME EQUALS expression','var_assign',3,'p_var_assign','calculate.py',63),
-  ('expression -> expression EXPONENT expression','expression',3,'p_expression','calculate.py',69),
-  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','calculate.py',70),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression','calculate.py',71),
-  ('expression -> expression PLUS expression','expression',3,'p_expression','calculate.py',72),
-  ('expression -> expression MINUS expression','expression',3,'p_expression','calculate.py',73),
-  ('expression -> INT','expression',1,'p_expression_int_float','calculate.py',79),
-  ('expression -> FLOAT','expression',1,'p_expression_int_float','calculate.py',80),
-  ('expression -> NAME','expression',1,'p_expression_var','calculate.py',86),
-  ('empty -> <empty>','empty',0,'p_empty','calculate.py',95),
+  ('calc -> expression','calc',1,'p_calc','language.py',81),
+  ('calc -> var_assign','calc',1,'p_calc','language.py',82),
+  ('calc -> empty','calc',1,'p_calc','language.py',83),
+  ('var_assign -> NAME EQUALS expression','var_assign',3,'p_var_assign','language.py',89),
+  ('empty -> <empty>','empty',0,'p_empty','language.py',95),
+  ('expression -> START CLIENT NAME','expression',3,'p_expression_start_stop_client','language.py',101),
+  ('expression -> STOP NAME','expression',2,'p_expression_start_stop_client','language.py',102),
+  ('expression -> START SERVER NAME','expression',3,'p_expression_start_server','language.py',116),
+  ('expression -> NAME CONNECT NAME','expression',3,'p_expression_connect','language.py',130),
+  ('expression -> EXIT','expression',1,'p_expression_exit','language.py',140),
+  ('expression -> NAME POST NAME expression','expression',4,'p_expression_post','language.py',146),
+  ('expression -> GET NAME','expression',2,'p_expression_get','language.py',154),
+  ('expression -> expression EXPONENT expression','expression',3,'p_expression','language.py',162),
+  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','language.py',163),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression','language.py',164),
+  ('expression -> expression PLUS expression','expression',3,'p_expression','language.py',165),
+  ('expression -> expression MINUS expression','expression',3,'p_expression','language.py',166),
+  ('expression -> INT','expression',1,'p_expression_int_float_str','language.py',172),
+  ('expression -> FLOAT','expression',1,'p_expression_int_float_str','language.py',173),
+  ('expression -> STRING','expression',1,'p_expression_int_float_str','language.py',174),
+  ('expression -> NAME','expression',1,'p_expression_var','language.py',181),
 ]

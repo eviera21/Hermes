@@ -7,34 +7,51 @@ Rule 1     calc -> expression
 Rule 2     calc -> var_assign
 Rule 3     calc -> empty
 Rule 4     var_assign -> NAME EQUALS expression
-Rule 5     expression -> expression EXPONENT expression
-Rule 6     expression -> expression MULTIPLY expression
-Rule 7     expression -> expression DIVIDE expression
-Rule 8     expression -> expression PLUS expression
-Rule 9     expression -> expression MINUS expression
-Rule 10    expression -> INT
-Rule 11    expression -> FLOAT
-Rule 12    expression -> NAME
-Rule 13    empty -> <empty>
+Rule 5     empty -> <empty>
+Rule 6     expression -> START CLIENT NAME
+Rule 7     expression -> STOP NAME
+Rule 8     expression -> START SERVER NAME
+Rule 9     expression -> NAME CONNECT NAME
+Rule 10    expression -> EXIT
+Rule 11    expression -> NAME POST NAME expression
+Rule 12    expression -> GET NAME
+Rule 13    expression -> expression EXPONENT expression
+Rule 14    expression -> expression MULTIPLY expression
+Rule 15    expression -> expression DIVIDE expression
+Rule 16    expression -> expression PLUS expression
+Rule 17    expression -> expression MINUS expression
+Rule 18    expression -> INT
+Rule 19    expression -> FLOAT
+Rule 20    expression -> STRING
+Rule 21    expression -> NAME
 
 Terminals, with rules where they appear
 
-DIVIDE               : 7
+CLIENT               : 6
+CONNECT              : 9
+DIVIDE               : 15
 EQUALS               : 4
-EXPONENT             : 5
-FLOAT                : 11
-INT                  : 10
-MINUS                : 9
-MULTIPLY             : 6
-NAME                 : 4 12
-PLUS                 : 8
+EXIT                 : 10
+EXPONENT             : 13
+FLOAT                : 19
+GET                  : 12
+INT                  : 18
+MINUS                : 17
+MULTIPLY             : 14
+NAME                 : 4 6 7 8 9 9 11 11 12 21
+PLUS                 : 16
+POST                 : 11
+SERVER               : 8
+START                : 6 8
+STOP                 : 7
+STRING               : 20
 error                : 
 
 Nonterminals, with rules where they appear
 
 calc                 : 0
 empty                : 3
-expression           : 1 4 5 5 6 6 7 7 8 8 9 9
+expression           : 1 4 11 13 13 14 14 15 15 16 16 17 17
 var_assign           : 2
 
 Parsing method: LALR
@@ -45,21 +62,34 @@ state 0
     (1) calc -> . expression
     (2) calc -> . var_assign
     (3) calc -> . empty
-    (5) expression -> . expression EXPONENT expression
-    (6) expression -> . expression MULTIPLY expression
-    (7) expression -> . expression DIVIDE expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . INT
-    (11) expression -> . FLOAT
-    (12) expression -> . NAME
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
     (4) var_assign -> . NAME EQUALS expression
-    (13) empty -> .
+    (5) empty -> .
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    NAME            shift and go to state 7
-    $end            reduce using rule 13 (empty -> .)
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 6
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
+    $end            reduce using rule 5 (empty -> .)
 
     calc                           shift and go to state 1
     expression                     shift and go to state 2
@@ -75,18 +105,18 @@ state 1
 state 2
 
     (1) calc -> expression .
-    (5) expression -> expression . EXPONENT expression
-    (6) expression -> expression . MULTIPLY expression
-    (7) expression -> expression . DIVIDE expression
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
 
     $end            reduce using rule 1 (calc -> expression .)
-    EXPONENT        shift and go to state 8
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
-    PLUS            shift and go to state 11
-    MINUS           shift and go to state 12
+    EXPONENT        shift and go to state 13
+    MULTIPLY        shift and go to state 14
+    DIVIDE          shift and go to state 15
+    PLUS            shift and go to state 16
+    MINUS           shift and go to state 17
 
 
 state 3
@@ -105,290 +135,578 @@ state 4
 
 state 5
 
-    (10) expression -> INT .
+    (6) expression -> START . CLIENT NAME
+    (8) expression -> START . SERVER NAME
 
-    EXPONENT        reduce using rule 10 (expression -> INT .)
-    MULTIPLY        reduce using rule 10 (expression -> INT .)
-    DIVIDE          reduce using rule 10 (expression -> INT .)
-    PLUS            reduce using rule 10 (expression -> INT .)
-    MINUS           reduce using rule 10 (expression -> INT .)
-    $end            reduce using rule 10 (expression -> INT .)
+    CLIENT          shift and go to state 18
+    SERVER          shift and go to state 19
 
 
 state 6
 
-    (11) expression -> FLOAT .
+    (9) expression -> NAME . CONNECT NAME
+    (11) expression -> NAME . POST NAME expression
+    (21) expression -> NAME .
+    (4) var_assign -> NAME . EQUALS expression
 
-    EXPONENT        reduce using rule 11 (expression -> FLOAT .)
-    MULTIPLY        reduce using rule 11 (expression -> FLOAT .)
-    DIVIDE          reduce using rule 11 (expression -> FLOAT .)
-    PLUS            reduce using rule 11 (expression -> FLOAT .)
-    MINUS           reduce using rule 11 (expression -> FLOAT .)
-    $end            reduce using rule 11 (expression -> FLOAT .)
+    CONNECT         shift and go to state 20
+    POST            shift and go to state 21
+    EXPONENT        reduce using rule 21 (expression -> NAME .)
+    MULTIPLY        reduce using rule 21 (expression -> NAME .)
+    DIVIDE          reduce using rule 21 (expression -> NAME .)
+    PLUS            reduce using rule 21 (expression -> NAME .)
+    MINUS           reduce using rule 21 (expression -> NAME .)
+    $end            reduce using rule 21 (expression -> NAME .)
+    EQUALS          shift and go to state 22
 
 
 state 7
 
-    (12) expression -> NAME .
-    (4) var_assign -> NAME . EQUALS expression
+    (7) expression -> STOP . NAME
 
-    EXPONENT        reduce using rule 12 (expression -> NAME .)
-    MULTIPLY        reduce using rule 12 (expression -> NAME .)
-    DIVIDE          reduce using rule 12 (expression -> NAME .)
-    PLUS            reduce using rule 12 (expression -> NAME .)
-    MINUS           reduce using rule 12 (expression -> NAME .)
-    $end            reduce using rule 12 (expression -> NAME .)
-    EQUALS          shift and go to state 13
+    NAME            shift and go to state 23
 
 
 state 8
 
-    (5) expression -> expression EXPONENT . expression
-    (5) expression -> . expression EXPONENT expression
-    (6) expression -> . expression MULTIPLY expression
-    (7) expression -> . expression DIVIDE expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . INT
-    (11) expression -> . FLOAT
-    (12) expression -> . NAME
+    (10) expression -> EXIT .
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    NAME            shift and go to state 15
+    EXPONENT        reduce using rule 10 (expression -> EXIT .)
+    MULTIPLY        reduce using rule 10 (expression -> EXIT .)
+    DIVIDE          reduce using rule 10 (expression -> EXIT .)
+    PLUS            reduce using rule 10 (expression -> EXIT .)
+    MINUS           reduce using rule 10 (expression -> EXIT .)
+    $end            reduce using rule 10 (expression -> EXIT .)
 
-    expression                     shift and go to state 14
 
 state 9
 
-    (6) expression -> expression MULTIPLY . expression
-    (5) expression -> . expression EXPONENT expression
-    (6) expression -> . expression MULTIPLY expression
-    (7) expression -> . expression DIVIDE expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . INT
-    (11) expression -> . FLOAT
-    (12) expression -> . NAME
+    (12) expression -> GET . NAME
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    NAME            shift and go to state 15
+    NAME            shift and go to state 24
 
-    expression                     shift and go to state 16
 
 state 10
 
-    (7) expression -> expression DIVIDE . expression
-    (5) expression -> . expression EXPONENT expression
-    (6) expression -> . expression MULTIPLY expression
-    (7) expression -> . expression DIVIDE expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . INT
-    (11) expression -> . FLOAT
-    (12) expression -> . NAME
+    (18) expression -> INT .
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    NAME            shift and go to state 15
+    EXPONENT        reduce using rule 18 (expression -> INT .)
+    MULTIPLY        reduce using rule 18 (expression -> INT .)
+    DIVIDE          reduce using rule 18 (expression -> INT .)
+    PLUS            reduce using rule 18 (expression -> INT .)
+    MINUS           reduce using rule 18 (expression -> INT .)
+    $end            reduce using rule 18 (expression -> INT .)
 
-    expression                     shift and go to state 17
 
 state 11
 
-    (8) expression -> expression PLUS . expression
-    (5) expression -> . expression EXPONENT expression
-    (6) expression -> . expression MULTIPLY expression
-    (7) expression -> . expression DIVIDE expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . INT
-    (11) expression -> . FLOAT
-    (12) expression -> . NAME
+    (19) expression -> FLOAT .
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    NAME            shift and go to state 15
+    EXPONENT        reduce using rule 19 (expression -> FLOAT .)
+    MULTIPLY        reduce using rule 19 (expression -> FLOAT .)
+    DIVIDE          reduce using rule 19 (expression -> FLOAT .)
+    PLUS            reduce using rule 19 (expression -> FLOAT .)
+    MINUS           reduce using rule 19 (expression -> FLOAT .)
+    $end            reduce using rule 19 (expression -> FLOAT .)
 
-    expression                     shift and go to state 18
 
 state 12
 
-    (9) expression -> expression MINUS . expression
-    (5) expression -> . expression EXPONENT expression
-    (6) expression -> . expression MULTIPLY expression
-    (7) expression -> . expression DIVIDE expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . INT
-    (11) expression -> . FLOAT
-    (12) expression -> . NAME
+    (20) expression -> STRING .
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    NAME            shift and go to state 15
+    EXPONENT        reduce using rule 20 (expression -> STRING .)
+    MULTIPLY        reduce using rule 20 (expression -> STRING .)
+    DIVIDE          reduce using rule 20 (expression -> STRING .)
+    PLUS            reduce using rule 20 (expression -> STRING .)
+    MINUS           reduce using rule 20 (expression -> STRING .)
+    $end            reduce using rule 20 (expression -> STRING .)
 
-    expression                     shift and go to state 19
 
 state 13
 
-    (4) var_assign -> NAME EQUALS . expression
-    (5) expression -> . expression EXPONENT expression
-    (6) expression -> . expression MULTIPLY expression
-    (7) expression -> . expression DIVIDE expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . INT
-    (11) expression -> . FLOAT
-    (12) expression -> . NAME
+    (13) expression -> expression EXPONENT . expression
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    NAME            shift and go to state 15
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 26
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 25
 
 state 14
 
-    (5) expression -> expression EXPONENT expression .
-    (5) expression -> expression . EXPONENT expression
-    (6) expression -> expression . MULTIPLY expression
-    (7) expression -> expression . DIVIDE expression
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
+    (14) expression -> expression MULTIPLY . expression
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
 
-    EXPONENT        reduce using rule 5 (expression -> expression EXPONENT expression .)
-    MULTIPLY        reduce using rule 5 (expression -> expression EXPONENT expression .)
-    DIVIDE          reduce using rule 5 (expression -> expression EXPONENT expression .)
-    PLUS            reduce using rule 5 (expression -> expression EXPONENT expression .)
-    MINUS           reduce using rule 5 (expression -> expression EXPONENT expression .)
-    $end            reduce using rule 5 (expression -> expression EXPONENT expression .)
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 26
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
 
-  ! EXPONENT        [ shift and go to state 8 ]
-  ! MULTIPLY        [ shift and go to state 9 ]
-  ! DIVIDE          [ shift and go to state 10 ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
-
+    expression                     shift and go to state 27
 
 state 15
 
-    (12) expression -> NAME .
+    (15) expression -> expression DIVIDE . expression
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
 
-    EXPONENT        reduce using rule 12 (expression -> NAME .)
-    MULTIPLY        reduce using rule 12 (expression -> NAME .)
-    DIVIDE          reduce using rule 12 (expression -> NAME .)
-    PLUS            reduce using rule 12 (expression -> NAME .)
-    MINUS           reduce using rule 12 (expression -> NAME .)
-    $end            reduce using rule 12 (expression -> NAME .)
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 26
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
 
+    expression                     shift and go to state 28
 
 state 16
 
-    (6) expression -> expression MULTIPLY expression .
-    (5) expression -> expression . EXPONENT expression
-    (6) expression -> expression . MULTIPLY expression
-    (7) expression -> expression . DIVIDE expression
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
+    (16) expression -> expression PLUS . expression
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
 
-    MULTIPLY        reduce using rule 6 (expression -> expression MULTIPLY expression .)
-    DIVIDE          reduce using rule 6 (expression -> expression MULTIPLY expression .)
-    PLUS            reduce using rule 6 (expression -> expression MULTIPLY expression .)
-    MINUS           reduce using rule 6 (expression -> expression MULTIPLY expression .)
-    $end            reduce using rule 6 (expression -> expression MULTIPLY expression .)
-    EXPONENT        shift and go to state 8
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 26
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
 
-  ! EXPONENT        [ reduce using rule 6 (expression -> expression MULTIPLY expression .) ]
-  ! MULTIPLY        [ shift and go to state 9 ]
-  ! DIVIDE          [ shift and go to state 10 ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
-
+    expression                     shift and go to state 29
 
 state 17
 
-    (7) expression -> expression DIVIDE expression .
-    (5) expression -> expression . EXPONENT expression
-    (6) expression -> expression . MULTIPLY expression
-    (7) expression -> expression . DIVIDE expression
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
+    (17) expression -> expression MINUS . expression
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
 
-    MULTIPLY        reduce using rule 7 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 7 (expression -> expression DIVIDE expression .)
-    PLUS            reduce using rule 7 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 7 (expression -> expression DIVIDE expression .)
-    $end            reduce using rule 7 (expression -> expression DIVIDE expression .)
-    EXPONENT        shift and go to state 8
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 26
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
 
-  ! EXPONENT        [ reduce using rule 7 (expression -> expression DIVIDE expression .) ]
-  ! MULTIPLY        [ shift and go to state 9 ]
-  ! DIVIDE          [ shift and go to state 10 ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
-
+    expression                     shift and go to state 30
 
 state 18
 
-    (8) expression -> expression PLUS expression .
-    (5) expression -> expression . EXPONENT expression
-    (6) expression -> expression . MULTIPLY expression
-    (7) expression -> expression . DIVIDE expression
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
+    (6) expression -> START CLIENT . NAME
 
-    PLUS            reduce using rule 8 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 8 (expression -> expression PLUS expression .)
-    $end            reduce using rule 8 (expression -> expression PLUS expression .)
-    EXPONENT        shift and go to state 8
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
-
-  ! EXPONENT        [ reduce using rule 8 (expression -> expression PLUS expression .) ]
-  ! MULTIPLY        [ reduce using rule 8 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 8 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
+    NAME            shift and go to state 31
 
 
 state 19
 
-    (9) expression -> expression MINUS expression .
-    (5) expression -> expression . EXPONENT expression
-    (6) expression -> expression . MULTIPLY expression
-    (7) expression -> expression . DIVIDE expression
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
+    (8) expression -> START SERVER . NAME
 
-    PLUS            reduce using rule 9 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 9 (expression -> expression MINUS expression .)
-    $end            reduce using rule 9 (expression -> expression MINUS expression .)
-    EXPONENT        shift and go to state 8
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
-
-  ! EXPONENT        [ reduce using rule 9 (expression -> expression MINUS expression .) ]
-  ! MULTIPLY        [ reduce using rule 9 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 9 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
+    NAME            shift and go to state 32
 
 
 state 20
 
+    (9) expression -> NAME CONNECT . NAME
+
+    NAME            shift and go to state 33
+
+
+state 21
+
+    (11) expression -> NAME POST . NAME expression
+
+    NAME            shift and go to state 34
+
+
+state 22
+
+    (4) var_assign -> NAME EQUALS . expression
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
+
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 26
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
+
+    expression                     shift and go to state 35
+
+state 23
+
+    (7) expression -> STOP NAME .
+
+    EXPONENT        reduce using rule 7 (expression -> STOP NAME .)
+    MULTIPLY        reduce using rule 7 (expression -> STOP NAME .)
+    DIVIDE          reduce using rule 7 (expression -> STOP NAME .)
+    PLUS            reduce using rule 7 (expression -> STOP NAME .)
+    MINUS           reduce using rule 7 (expression -> STOP NAME .)
+    $end            reduce using rule 7 (expression -> STOP NAME .)
+
+
+state 24
+
+    (12) expression -> GET NAME .
+
+    EXPONENT        reduce using rule 12 (expression -> GET NAME .)
+    MULTIPLY        reduce using rule 12 (expression -> GET NAME .)
+    DIVIDE          reduce using rule 12 (expression -> GET NAME .)
+    PLUS            reduce using rule 12 (expression -> GET NAME .)
+    MINUS           reduce using rule 12 (expression -> GET NAME .)
+    $end            reduce using rule 12 (expression -> GET NAME .)
+
+
+state 25
+
+    (13) expression -> expression EXPONENT expression .
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
+
+    EXPONENT        reduce using rule 13 (expression -> expression EXPONENT expression .)
+    MULTIPLY        reduce using rule 13 (expression -> expression EXPONENT expression .)
+    DIVIDE          reduce using rule 13 (expression -> expression EXPONENT expression .)
+    PLUS            reduce using rule 13 (expression -> expression EXPONENT expression .)
+    MINUS           reduce using rule 13 (expression -> expression EXPONENT expression .)
+    $end            reduce using rule 13 (expression -> expression EXPONENT expression .)
+
+  ! EXPONENT        [ shift and go to state 13 ]
+  ! MULTIPLY        [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 15 ]
+  ! PLUS            [ shift and go to state 16 ]
+  ! MINUS           [ shift and go to state 17 ]
+
+
+state 26
+
+    (9) expression -> NAME . CONNECT NAME
+    (11) expression -> NAME . POST NAME expression
+    (21) expression -> NAME .
+
+    CONNECT         shift and go to state 20
+    POST            shift and go to state 21
+    EXPONENT        reduce using rule 21 (expression -> NAME .)
+    MULTIPLY        reduce using rule 21 (expression -> NAME .)
+    DIVIDE          reduce using rule 21 (expression -> NAME .)
+    PLUS            reduce using rule 21 (expression -> NAME .)
+    MINUS           reduce using rule 21 (expression -> NAME .)
+    $end            reduce using rule 21 (expression -> NAME .)
+
+
+state 27
+
+    (14) expression -> expression MULTIPLY expression .
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
+
+    MULTIPLY        reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    DIVIDE          reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    PLUS            reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    MINUS           reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    $end            reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    EXPONENT        shift and go to state 13
+
+  ! EXPONENT        [ reduce using rule 14 (expression -> expression MULTIPLY expression .) ]
+  ! MULTIPLY        [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 15 ]
+  ! PLUS            [ shift and go to state 16 ]
+  ! MINUS           [ shift and go to state 17 ]
+
+
+state 28
+
+    (15) expression -> expression DIVIDE expression .
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
+
+    MULTIPLY        reduce using rule 15 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 15 (expression -> expression DIVIDE expression .)
+    PLUS            reduce using rule 15 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 15 (expression -> expression DIVIDE expression .)
+    $end            reduce using rule 15 (expression -> expression DIVIDE expression .)
+    EXPONENT        shift and go to state 13
+
+  ! EXPONENT        [ reduce using rule 15 (expression -> expression DIVIDE expression .) ]
+  ! MULTIPLY        [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 15 ]
+  ! PLUS            [ shift and go to state 16 ]
+  ! MINUS           [ shift and go to state 17 ]
+
+
+state 29
+
+    (16) expression -> expression PLUS expression .
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
+
+    PLUS            reduce using rule 16 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 16 (expression -> expression PLUS expression .)
+    $end            reduce using rule 16 (expression -> expression PLUS expression .)
+    EXPONENT        shift and go to state 13
+    MULTIPLY        shift and go to state 14
+    DIVIDE          shift and go to state 15
+
+  ! EXPONENT        [ reduce using rule 16 (expression -> expression PLUS expression .) ]
+  ! MULTIPLY        [ reduce using rule 16 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 16 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 16 ]
+  ! MINUS           [ shift and go to state 17 ]
+
+
+state 30
+
+    (17) expression -> expression MINUS expression .
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
+
+    PLUS            reduce using rule 17 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 17 (expression -> expression MINUS expression .)
+    $end            reduce using rule 17 (expression -> expression MINUS expression .)
+    EXPONENT        shift and go to state 13
+    MULTIPLY        shift and go to state 14
+    DIVIDE          shift and go to state 15
+
+  ! EXPONENT        [ reduce using rule 17 (expression -> expression MINUS expression .) ]
+  ! MULTIPLY        [ reduce using rule 17 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 17 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 16 ]
+  ! MINUS           [ shift and go to state 17 ]
+
+
+state 31
+
+    (6) expression -> START CLIENT NAME .
+
+    EXPONENT        reduce using rule 6 (expression -> START CLIENT NAME .)
+    MULTIPLY        reduce using rule 6 (expression -> START CLIENT NAME .)
+    DIVIDE          reduce using rule 6 (expression -> START CLIENT NAME .)
+    PLUS            reduce using rule 6 (expression -> START CLIENT NAME .)
+    MINUS           reduce using rule 6 (expression -> START CLIENT NAME .)
+    $end            reduce using rule 6 (expression -> START CLIENT NAME .)
+
+
+state 32
+
+    (8) expression -> START SERVER NAME .
+
+    EXPONENT        reduce using rule 8 (expression -> START SERVER NAME .)
+    MULTIPLY        reduce using rule 8 (expression -> START SERVER NAME .)
+    DIVIDE          reduce using rule 8 (expression -> START SERVER NAME .)
+    PLUS            reduce using rule 8 (expression -> START SERVER NAME .)
+    MINUS           reduce using rule 8 (expression -> START SERVER NAME .)
+    $end            reduce using rule 8 (expression -> START SERVER NAME .)
+
+
+state 33
+
+    (9) expression -> NAME CONNECT NAME .
+
+    EXPONENT        reduce using rule 9 (expression -> NAME CONNECT NAME .)
+    MULTIPLY        reduce using rule 9 (expression -> NAME CONNECT NAME .)
+    DIVIDE          reduce using rule 9 (expression -> NAME CONNECT NAME .)
+    PLUS            reduce using rule 9 (expression -> NAME CONNECT NAME .)
+    MINUS           reduce using rule 9 (expression -> NAME CONNECT NAME .)
+    $end            reduce using rule 9 (expression -> NAME CONNECT NAME .)
+
+
+state 34
+
+    (11) expression -> NAME POST NAME . expression
+    (6) expression -> . START CLIENT NAME
+    (7) expression -> . STOP NAME
+    (8) expression -> . START SERVER NAME
+    (9) expression -> . NAME CONNECT NAME
+    (10) expression -> . EXIT
+    (11) expression -> . NAME POST NAME expression
+    (12) expression -> . GET NAME
+    (13) expression -> . expression EXPONENT expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . expression PLUS expression
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . INT
+    (19) expression -> . FLOAT
+    (20) expression -> . STRING
+    (21) expression -> . NAME
+
+    START           shift and go to state 5
+    STOP            shift and go to state 7
+    NAME            shift and go to state 26
+    EXIT            shift and go to state 8
+    GET             shift and go to state 9
+    INT             shift and go to state 10
+    FLOAT           shift and go to state 11
+    STRING          shift and go to state 12
+
+    expression                     shift and go to state 36
+
+state 35
+
     (4) var_assign -> NAME EQUALS expression .
-    (5) expression -> expression . EXPONENT expression
-    (6) expression -> expression . MULTIPLY expression
-    (7) expression -> expression . DIVIDE expression
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
 
     $end            reduce using rule 4 (var_assign -> NAME EQUALS expression .)
-    EXPONENT        shift and go to state 8
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
-    PLUS            shift and go to state 11
-    MINUS           shift and go to state 12
+    EXPONENT        shift and go to state 13
+    MULTIPLY        shift and go to state 14
+    DIVIDE          shift and go to state 15
+    PLUS            shift and go to state 16
+    MINUS           shift and go to state 17
 
+
+state 36
+
+    (11) expression -> NAME POST NAME expression .
+    (13) expression -> expression . EXPONENT expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . DIVIDE expression
+    (16) expression -> expression . PLUS expression
+    (17) expression -> expression . MINUS expression
+
+  ! shift/reduce conflict for EXPONENT resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    $end            reduce using rule 11 (expression -> NAME POST NAME expression .)
+    EXPONENT        shift and go to state 13
+    MULTIPLY        shift and go to state 14
+    DIVIDE          shift and go to state 15
+    PLUS            shift and go to state 16
+    MINUS           shift and go to state 17
+
+  ! EXPONENT        [ reduce using rule 11 (expression -> NAME POST NAME expression .) ]
+  ! MULTIPLY        [ reduce using rule 11 (expression -> NAME POST NAME expression .) ]
+  ! DIVIDE          [ reduce using rule 11 (expression -> NAME POST NAME expression .) ]
+  ! PLUS            [ reduce using rule 11 (expression -> NAME POST NAME expression .) ]
+  ! MINUS           [ reduce using rule 11 (expression -> NAME POST NAME expression .) ]
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for EXPONENT in state 36 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 36 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 36 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 36 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 36 resolved as shift

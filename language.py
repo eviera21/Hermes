@@ -1,7 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
-from env_controller import EnvController
-import re
+import sys
+from serverAndClient.env_controller import EnvController
 
 tokens = [
     'INT',
@@ -22,11 +22,9 @@ reserved = {
     'connect' : 'CONNECT',
     'post' : 'POST',
     'get': 'GET',
-    'clear' : 'CLEAR',
     'client' : 'CLIENT',
     'server' : 'SERVER',
-    'message' : 'MESSAGE',
-    'data' : 'DATA',
+    'exit' : 'EXIT'
 }
 
 tokens += reserved.values()
@@ -73,7 +71,7 @@ precedence = (
 
     ('left', 'PLUS', 'MINUS'),
     ('left', 'MULTIPLY', 'DIVIDE'),
-    ('left', 'EXPONENT')
+    ('left', 'EXPONENT'),
 )
 var = {}
 env = EnvController()
@@ -106,10 +104,10 @@ def p_expression_start_stop_client(p):
     if p[1] == 'start' and p[2] == 'client':
         client = p[3]
             #start client
-        env.create_client(client)
+        env.start_client(client)
     elif p[1] == 'stop':
         #we delete the server
-        env.delete_client_or_server(p[2])
+        env.stop_client_or_server(p[2])
     else:
         print('yikes, that client start/stop did not work')
 
@@ -128,43 +126,35 @@ def p_expression_start_server(p):
     else:
         print('yikes, that server start did not work')
 
-def p_expression_post(p):
-    '''
-    expression : NAME POST NAME expression
-    '''
-    if p[2] == 'post':
-        #send message
-        varName = p[2]
-        env.data(varName)
-    else:
-        print("I mean, that was supposed to work. How did you mess it up? That did NOT post.")
-
 def p_expression_connect(p):
     '''expression : NAME CONNECT NAME'''
     if p[2] == 'connect':
         client = p[1]
         target = p[3]
         msg = "Pinging"
-        env.send_messsage(client, target, msg)
+        env.post(client, target, msg)
     else:
         print("yikes, there's an error in local connection ...")
 
-def p_expression_message(p):
+def p_expression_exit(p):
+    '''expression : EXIT'''
+    if p[1] == 'exit':
+        sys.exit()
+
+def p_expression_post(p):
     """
-    expression : NAME POST NAME INT
-            | NAME POST NAME FLOAT
-            | NAME POST NAME STRING
+    expression : NAME POST NAME STRING
+               | NAME POST NAME NAME
     """
-    if p[2] == "message":
-        size = len(p)
-        env.send_messsage(p[1], p[3], p[4].replace('"',''))
+    if p[2] == "post":
+        env.post(p[1], p[3], p[4])
     else:
         print("yikes while sending message ...")
 
-def p_expression_data(p):
-    '''expression : DATA NAME'''
-    if p[1] == "data":
-        env.data(p[2])
+def p_expression_get(p):
+    '''expression : GET NAME'''
+    if p[1] == "get":
+        env.get(p[2])
     else:
         print("yikes while getting variable data ...")
 
@@ -178,18 +168,14 @@ def p_expression(p):
     '''
     p[0] = (p[2], p[1], p[3])
 
-def p_expression_int_float(p):
+def p_expression_int_float_str(p):
     '''
     expression : INT
                 | FLOAT
+                | STRING
     '''
     p[0] = p[1]
 
-def p_expression_str(p):
-    '''
-    expression : STRING
-    '''
-    p[0] = ('str', p[1].replace('"',''))
 
 def p_expression_var(p):
     '''
