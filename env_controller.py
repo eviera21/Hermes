@@ -48,7 +48,7 @@ class EnvController:
             return removed_server
         elif(isinstance(value, EchoClient)):
             removed_client = self.env.pop(var_name)
-            self.logger.debug(f'client removed: client_id={removed_client.id')
+            self.logger.debug(f'client removed: client_id={removed_client.id}')
             return removed_client
         elif(isinstance(value, (int, str))):
             print(f'Error: Variable {var_name} isnot of type: \"EchoServer\" or \"EchoClient\"')
