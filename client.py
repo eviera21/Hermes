@@ -4,7 +4,7 @@ from server import EchoServer
 import socket
 import requests
 
-logging.basicConfig(filename= "env_logs.log", level=logging.DEBUG, format='% (name)s: %(message)s')
+logging.basicConfig(filename= "env_logs.log", level=logging.DEBUG, format='%(name)s: %(message)s')
 
 class EchoClient:
     def __init__(self):
@@ -41,4 +41,4 @@ class EchoClient:
         return self.connections.popitem(server)
 
     def __repr__(self):
-        return f'EchoClient>client_={self.client_id}, connection_history={self.connection_history}>'
+        return f'EchoClient>client_id={self.client_id}, connection_history={self.connection_history}>'

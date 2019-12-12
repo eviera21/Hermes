@@ -1,6 +1,6 @@
 import logging, sys, socketserver, uuid, socket, threading, requests
 
-logging.basicConfig(filename= "env_logs.log", level=logging.DEBUG,format='%(name)s: %(messages)s')
+logging.basicConfig(filename= "env_logs.log", level=logging.DEBUG,format='%(name)s: %(messages)s',)
 
 class EchoRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
@@ -24,7 +24,7 @@ class EchoServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
     def run_me(self):
         # Run server to handle each request on a different thread.
-        t = threading. Thread(target=self.serve_forever)
+        t = threading.Thread(target=self.serve_forever)
         t.daemon = True
         t.start()
         self.is_running = True
@@ -53,7 +53,7 @@ class EchoServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     def send_external(self, external_address):
         self.logger.debug(f'connecting to {external_address}')
         req = requests.get(url=external_address)
-        print(f'Response frrom {external_address}: {req.status_code}')
+        print(f'Response from {external_address}: {req.status_code}')
 
     def __repr__(self):
         ip, port = self.server_address
